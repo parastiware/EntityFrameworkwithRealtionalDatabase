@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CustomerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CustomerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="CustomerModel.Customer" />
+    <EntitySet Name="Orders" EntityType="CustomerModel.Order" />
+    <AssociationSet Name="FK_Order_Order" Association="CustomerModel.FK_Order_Order">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Name" Type="String" MaxLength="100" FixedLength="true" Unicode="false" />
+    <Property Name="Customer_Adderss" Type="String" MaxLength="1000" FixedLength="true" Unicode="false" />
+    <Property Name="Customer_Contact" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Orders" Relationship="CustomerModel.FK_Order_Order" FromRole="Customer" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Order_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="Int32" />
+    <Property Name="Order_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Order_date" Type="DateTime" Precision="0" />
+    <Property Name="Order_Amount" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="Customer" Relationship="CustomerModel.FK_Order_Order" FromRole="Order" ToRole="Customer" />
+  </EntityType>
+  <Association Name="FK_Order_Order">
+    <End Type="CustomerModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="CustomerModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="Customer_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
